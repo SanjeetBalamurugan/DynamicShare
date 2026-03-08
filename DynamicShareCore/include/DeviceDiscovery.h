@@ -42,7 +42,7 @@ class DeviceDiscovery {
 		void AddDevice(std::string& device_data);
 
 		std::string GetLocalIP() { return m_Socket.local_endpoint().address().to_string(); }
-		std::vector<Device> getDevices() { return m_Devices; }
+		const std::vector<Device>& getDevices() { return m_Devices; }
 
 	private:
 		asio::io_context m_Context;
@@ -58,7 +58,7 @@ class DeviceDiscovery {
 
 inline OSType getOsName()
 {
-    #ifdef _WIN32 || _WIN64
+    #if defined(_WIN32) || defined(_WIN64)
     return OSType::WINDOWS;
     #elif __APPLE__ || __MACH__
     return OSType::MACOS;

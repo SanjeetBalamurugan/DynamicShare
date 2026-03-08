@@ -12,7 +12,7 @@ void DeviceDiscovery::SetupSender() {
 }
 
 void DeviceDiscovery::SendMessage(const std::string& message) {
-	std::string info = m_DeviceID + "?" + std::to_string(static_cast<int>(getOsName())) + "?" + this->GetLocalIP() + std::to_string(30001);
+	std::string info = m_DeviceID + "?" + std::to_string(static_cast<int>(getOsName())) + "?" + this->GetLocalIP() + "?" + std::to_string(30001);
 	//m_Socket.send_to(asio::buffer(message), m_Endpoint);
 	m_Socket.send_to(asio::buffer(info), m_Endpoint);
 }
@@ -42,14 +42,13 @@ void DeviceDiscovery::AddDevice(std::string& device_data) {
 	}
 
 	for (const Device& d: m_Devices) {
-		if(tokens[0] == d.device_id)
-			break;
-
-		n.device_id = tokens[0];
-		n.os_type = static_cast<OSType>(std::stoi(tokens[1]));
-		n.ip = tokens[2];
-		n.port = MULTICAST_PORT;
+		if(tokens[0] == d.device_id) return;
 	}
+
+	n.device_id = tokens[0];
+	n.os_type = static_cast<OSType>(std::stoi(tokens[1]));
+	n.ip = tokens[2];
+	n.port = MULTICAST_PORT;
 
 	m_Devices.push_back(n);
 }
