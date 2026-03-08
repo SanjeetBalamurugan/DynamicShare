@@ -28,6 +28,10 @@ struct Device {
 	static Device Empty() {
 		return {"XX", "0.0.0.0", -1, OSType::NONE};
 	}
+
+	void pprint() const {
+		std::cout << "DeviceID: " << device_id << "\nIP: " << ip << ":" << std::to_string(port) << "\nOS Type: " << std::to_string(static_cast<int>(os_type)) << "\n\n";
+	}
 };
 
 class DeviceDiscovery {

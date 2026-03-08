@@ -1,6 +1,10 @@
 #include <iostream>
 #include "DeviceDiscovery.h"
 
+#ifdef _WIN64 || _WIN32
+#include <conio.h>
+#endif
+
 int main(int argc, char* argv[]) {
     if (argc < 2) return 1;
     
@@ -17,10 +21,21 @@ int main(int argc, char* argv[]) {
     } else if (mode == 1) {
         d.SetupReciever();
         while (true) {
-	    std::string device_data = d.RecieveMessage();
-            std::cout << "Received: " << device_data << std::endl;
-	    d.AddDevice(device_data);
+		std::string device_data = d.RecieveMessage();
+		std::cout << "Received: " << device_data << std::endl;
+		d.AddDevice(device_data);
+
+#ifdef _WIN32 || _WIN64
+		if (_kbhit()) {
+			char ch = _getch();
+			if (ch == 'q') break;
+		}
+#endif
         }
+    }
+
+    for (const Device& dv: d.getDevices()) {
+	    dv.pprint();
     }
 
     return 0;
